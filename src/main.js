@@ -8,6 +8,7 @@ import Level2Scene from './scenes/Level2Scene.js';
 import Level3Scene from './scenes/Level3Scene.js';
 import GameOverScene from './scenes/GameOverScene.js';
 import VictoryScene from './scenes/VictoryScene.js';
+import PauseScene from './scenes/PauseScene.js';
 
 // Game configuration
 const gameConfig = {
@@ -20,7 +21,7 @@ const gameConfig = {
     default: 'arcade',
     arcade: {
       gravity: { y: CONFIG.gravity },
-      debug: true,
+      debug: false,
     },
   },
   scene: [
@@ -31,6 +32,7 @@ const gameConfig = {
     Level3Scene,
     GameOverScene,
     VictoryScene,
+    PauseScene,
   ],
   pixelArt: true,
   scale: {

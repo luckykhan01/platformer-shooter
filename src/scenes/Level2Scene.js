@@ -33,6 +33,9 @@ export default class Level2Scene extends Level1Scene {
         this.physics.world.setBounds(0, 0, 3000, 600);
 
         this.pauseKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
+        // Play level music
+        this.playLevelMusic();
     }
 
     createBackground() {

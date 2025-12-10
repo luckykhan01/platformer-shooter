@@ -51,6 +51,20 @@ export default class Level1Scene extends Phaser.Scene {
 
         // Pause key
         this.pauseKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
+        // Play level music (once, not looped)
+        this.playLevelMusic();
+    }
+
+    playLevelMusic() {
+        // Stop all previous music
+        this.sound.stopAll();
+        // Play level-specific music
+        const musicKey = `level${this.currentLevel}Music`;
+        if (this.cache.audio.exists(musicKey)) {
+            this.levelMusic = this.sound.add(musicKey, { loop: false, volume: 0.6 });
+            this.levelMusic.play();
+        }
     }
 
     createBackground() {
@@ -382,7 +396,7 @@ export default class Level1Scene extends Phaser.Scene {
         // Pause
         if (Phaser.Input.Keyboard.JustDown(this.pauseKey)) {
             this.scene.pause();
-            // TODO: Show pause menu
+            this.scene.launch(SCENES.PAUSE, { pausedScene: this.scene.key });
         }
 
         // DEBUG: Level skip keys (1, 2, 3)

@@ -57,8 +57,11 @@ export default class BootScene extends Phaser.Scene {
     }
 
     loadSounds() {
-        // Sound files will be loaded once generated
-        // Placeholder: game will work without sounds initially
+        // Load music files
+        this.load.audio('mainTheme', 'assets/sounds/music/maintheme.mp3');
+        this.load.audio('level1Music', 'assets/sounds/music/LEVEL1.mp3');
+        this.load.audio('level2Music', 'assets/sounds/music/LEVEL2.mp3');
+        this.load.audio('level3Music', 'assets/sounds/music/LEVEL3.mp3');
     }
 
     create() {

@@ -6,6 +6,7 @@ export const SCENES = {
     LEVEL_3: 'Level3Scene',
     GAME_OVER: 'GameOverScene',
     VICTORY: 'VictoryScene',
+    PAUSE: 'PauseScene',
 };
 
 export const EVENTS = {

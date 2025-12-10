@@ -212,13 +212,23 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         if (bullet) {
             bullet.setActive(true);
-            bullet.setVisible(true);
+            bullet.setVisible(false); // Hide sprite, use graphics
 
             if (!bullet.graphics) {
                 bullet.graphics = this.scene.add.graphics();
-                bullet.graphics.fillStyle(0xff0000, 1);
-                bullet.graphics.fillCircle(0, 0, 4);
             }
+
+            // Redraw with glow effect
+            bullet.graphics.clear();
+            bullet.graphics.fillStyle(0xff0000, 0.3);
+            bullet.graphics.fillCircle(0, 0, 10);
+            bullet.graphics.fillStyle(0xff3300, 0.5);
+            bullet.graphics.fillCircle(0, 0, 7);
+            bullet.graphics.fillStyle(0xff0000, 1);
+            bullet.graphics.fillCircle(0, 0, 4);
+            bullet.graphics.fillStyle(0xffaaaa, 0.9);
+            bullet.graphics.fillCircle(0, 0, 2);
+
             bullet.graphics.x = bullet.x;
             bullet.graphics.y = bullet.y;
 
@@ -248,13 +258,23 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
             if (bullet) {
                 bullet.setActive(true);
-                bullet.setVisible(true);
+                bullet.setVisible(false); // Hide sprite, use graphics
 
                 if (!bullet.graphics) {
                     bullet.graphics = this.scene.add.graphics();
-                    bullet.graphics.fillStyle(0xff0000, 1);
-                    bullet.graphics.fillCircle(0, 0, 4);
                 }
+
+                // Redraw with glow effect
+                bullet.graphics.clear();
+                bullet.graphics.fillStyle(0xff0000, 0.3);
+                bullet.graphics.fillCircle(0, 0, 10);
+                bullet.graphics.fillStyle(0xff3300, 0.5);
+                bullet.graphics.fillCircle(0, 0, 7);
+                bullet.graphics.fillStyle(0xff0000, 1);
+                bullet.graphics.fillCircle(0, 0, 4);
+                bullet.graphics.fillStyle(0xffaaaa, 0.9);
+                bullet.graphics.fillCircle(0, 0, 2);
+
                 bullet.graphics.x = bullet.x;
                 bullet.graphics.y = bullet.y;
 

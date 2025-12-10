@@ -24,7 +24,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         // Respawn and coin tracking
         this.respawnX = x;  // Store starting position
         this.respawnY = y;
-        this.coins = 0;  // Track coins collected by this player
+        this.coins = window.gameState ? window.gameState.coins : 0;  // Preserve coins from previous levels
 
         // Physics properties
         this.setCollideWorldBounds(true);
@@ -155,14 +155,32 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (bullet) {
             bullet.setActive(true);
-            bullet.setVisible(true);
+            bullet.setVisible(false); // Hide the sprite, use graphics only
 
-            // Create bullet visual
+            // Create beautiful bullet visual with glow effect
             if (!bullet.graphics) {
                 bullet.graphics = this.scene.add.graphics();
-                bullet.graphics.fillStyle(0xffdd00, 1);
-                bullet.graphics.fillCircle(0, 0, 4);
             }
+
+            // Redraw bullet with glow
+            bullet.graphics.clear();
+
+            // Outer glow (larger, transparent)
+            bullet.graphics.fillStyle(0xff6600, 0.3);
+            bullet.graphics.fillCircle(0, 0, 10);
+
+            // Middle glow
+            bullet.graphics.fillStyle(0xffaa00, 0.5);
+            bullet.graphics.fillCircle(0, 0, 7);
+
+            // Inner core (bright)
+            bullet.graphics.fillStyle(0xffdd00, 1);
+            bullet.graphics.fillCircle(0, 0, 4);
+
+            // Hot center (white)
+            bullet.graphics.fillStyle(0xffffff, 0.9);
+            bullet.graphics.fillCircle(0, 0, 2);
+
             bullet.graphics.x = bullet.x;
             bullet.graphics.y = bullet.y;
 
@@ -369,8 +387,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     collectCoin() {
         this.coins++;
         // Update coin display if it exists in the scene
-        if (this.scene.coinText) {
-            this.scene.coinText.setText(`${this.coins}`);
+        if (this.scene.coinsText) {
+            this.scene.coinsText.setText(`${this.coins}`);
         }
         // Also update global state for compatibility
         if (window.gameState) {

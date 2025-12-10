@@ -70,6 +70,31 @@ export default class MenuScene extends Phaser.Scene {
             repeat: -1,
             ease: 'Sine.easeInOut',
         });
+
+        // Play main theme music (looped) - handle browser autoplay policy
+        this.playMainTheme();
+
+        // Also start music on first user interaction (for browsers that block autoplay)
+        this.input.once('pointerdown', () => {
+            this.playMainTheme();
+        });
+    }
+
+    playMainTheme() {
+        // Only play if not already playing
+        const existingMusic = this.sound.get('mainTheme');
+        if (existingMusic && existingMusic.isPlaying) return;
+
+        // Stop any other music
+        this.sound.stopAll();
+
+        // Play main theme
+        try {
+            this.mainTheme = this.sound.add('mainTheme', { loop: true, volume: 0.5 });
+            this.mainTheme.play();
+        } catch (e) {
+            console.log('Audio play failed, waiting for user interaction');
+        }
     }
 
     createButton(x, y, text, callback) {

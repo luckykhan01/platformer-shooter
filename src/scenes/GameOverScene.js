@@ -11,6 +11,9 @@ export default class GameOverScene extends Phaser.Scene {
         console.log('GameOverScene.create() started', data);
         const { width, height } = this.cameras.main;
 
+        // Stop all music
+        this.sound.stopAll();
+
         // Get coin and level data from scene data or fallback to global state
         const coins = data.coins !== undefined ? data.coins : window.gameState.coins;
         const level = data.level !== undefined ? data.level : window.gameState.currentLevel;
