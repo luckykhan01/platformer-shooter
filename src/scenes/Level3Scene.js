@@ -13,7 +13,8 @@ export default class Level3Scene extends Level1Scene {
 
     create() {
         this.currentLevel = 3;
-        this.levelConfig = CONFIG.levels[3]; // Reuse parent create logic
+        this.levelConfig = CONFIG.levels[3];
+        this.isLevelComplete = false; // Reset level completion flag
 
         this.createBackground();
         this.createPlatforms();
@@ -34,18 +35,84 @@ export default class Level3Scene extends Level1Scene {
     }
 
     createBackground() {
+        // Dark volcanic sky
         const bg = this.add.graphics();
-        bg.fillGradientStyle(0x2c3e50, 0x2c3e50, 0x34495e, 0x34495e, 1);
+        bg.fillGradientStyle(0x1a0a0a, 0x1a0a0a, 0x3a1a0a, 0x3a1a0a, 1);
         bg.fillRect(0, 0, 3500, 600);
         bg.setScrollFactor(0);
 
-        // Add metal panels
-        for (let x = 0; x < 3500; x += 200) {
-            const panel = this.add.graphics();
-            panel.lineStyle(2, 0x7f8c8d, 0.3);
-            panel.strokeRect(0, 0, 200, 600);
-            panel.x = x;
-            panel.setScrollFactor(0.2);
+        // Glowing lava pool at bottom
+        const lavaGlow = this.add.graphics();
+        lavaGlow.fillGradientStyle(0xff4400, 0xff6600, 0xff2200, 0xff0000, 1);
+        lavaGlow.fillRect(0, 550, 3500, 50);
+        lavaGlow.setScrollFactor(0);
+
+        // Pulsing glow effect
+        this.tweens.add({
+            targets: lavaGlow,
+            alpha: 0.6,
+            duration: 800,
+            yoyo: true,
+            repeat: -1
+        });
+
+        // Volcanic mountains
+        for (let i = 0; i < 8; i++) {
+            const mountain = this.add.graphics();
+            const x = i * 450;
+            const height = Phaser.Math.Between(200, 400);
+
+            // Mountain shape
+            mountain.fillStyle(0x2a1a1a, 1);
+            mountain.fillTriangle(0, height, 150, 0, 300, height);
+
+            // Lava glow at top
+            mountain.fillStyle(0xff4400, 0.6);
+            mountain.fillCircle(150, 10, 20);
+
+            mountain.x = x;
+            mountain.y = 600 - height;
+            mountain.setScrollFactor(0.2);
+        }
+
+        // Smoke/ash particles
+        for (let i = 0; i < 30; i++) {
+            const smoke = this.add.graphics();
+            smoke.fillStyle(0x444444, Phaser.Math.FloatBetween(0.2, 0.5));
+            smoke.fillCircle(0, 0, Phaser.Math.Between(10, 30));
+            smoke.x = Phaser.Math.Between(0, 3500);
+            smoke.y = Phaser.Math.Between(50, 400);
+            smoke.setScrollFactor(0.4);
+
+            // Floating animation
+            this.tweens.add({
+                targets: smoke,
+                y: smoke.y - 100,
+                alpha: 0,
+                duration: Phaser.Math.Between(3000, 6000),
+                repeat: -1,
+                delay: Phaser.Math.Between(0, 2000)
+            });
+        }
+
+        // Fire particles rising from below
+        for (let i = 0; i < 20; i++) {
+            const fire = this.add.graphics();
+            fire.fillStyle(Phaser.Math.Between(0, 1) ? 0xff6600 : 0xff4400, 0.8);
+            fire.fillCircle(0, 0, Phaser.Math.Between(3, 8));
+            fire.x = Phaser.Math.Between(0, 3500);
+            fire.y = 580;
+            fire.setScrollFactor(0);
+
+            // Rising animation
+            this.tweens.add({
+                targets: fire,
+                y: Phaser.Math.Between(300, 500),
+                alpha: 0,
+                duration: Phaser.Math.Between(2000, 4000),
+                repeat: -1,
+                delay: Phaser.Math.Between(0, 3000)
+            });
         }
     }
 
@@ -73,6 +140,9 @@ export default class Level3Scene extends Level1Scene {
 
         // Boss platform
         this.createPlatform(3100, 480, 400, 20, 0xc0392b);
+
+        // Stepping platform to reach the end
+        this.createPlatform(3350, 350, 100, 20, 0x7f8c8d);
 
         // End platform
         this.createPlatform(3300, 200, 200, 20, 0xf39c12);

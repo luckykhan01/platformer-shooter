@@ -54,12 +54,13 @@ export default class GameOverScene extends Phaser.Scene {
 
         // Restart button
         const restartButton = this.createButton(width / 2, height / 1.6, 'RESTART', () => {
-            // Restart the level where the player died
-            const levelKey = `Level${window.gameState.currentLevel}Scene`;
-            // Reset lives
+            // Reset game state and start from Level 1
             window.gameState.lives = CONFIG.lives;
             window.gameState.health = CONFIG.player.maxHealth;
-            this.scene.start(SCENES[`LEVEL_${window.gameState.currentLevel}`]);
+            window.gameState.currentLevel = 1;
+            window.gameState.coins = 0;
+            window.gameState.score = 0;
+            this.scene.start(SCENES.LEVEL_1);
         });
 
         // Quit button

@@ -13,6 +13,7 @@ export default class Level1Scene extends Phaser.Scene {
     create() {
         this.currentLevel = 1;
         this.levelConfig = CONFIG.levels[1];
+        this.isLevelComplete = false; // Reset level completion flag
 
         // Create background
         this.createBackground();
@@ -93,22 +94,31 @@ export default class Level1Scene extends Phaser.Scene {
     }
 
     createPlatform(x, y, width, height, color) {
+        // Create a graphics object for the platform visual
         const platform = this.add.graphics();
+        platform.setPosition(x, y);
+
+        // Draw filled rectangle with the specified color
         platform.fillStyle(color, 1);
         platform.fillRect(0, 0, width, height);
-        platform.lineStyle(2, 0x000000, 0.5);
+
+        // Add a darker border for depth
+        const darkerColor = Phaser.Display.Color.ValueToColor(color).darken(30).color;
+        platform.lineStyle(3, darkerColor, 1);
         platform.strokeRect(0, 0, width, height);
 
-        const sprite = this.add.sprite(x, y).setOrigin(0, 0);
-        sprite.setTexture(platform.generateTexture('platform'));
-        sprite.setDisplaySize(width, height); // Set visual size
+        // Add top highlight for 3D effect
+        const lighterColor = Phaser.Display.Color.ValueToColor(color).lighten(20).color;
+        platform.lineStyle(2, lighterColor, 0.8);
+        platform.beginPath();
+        platform.moveTo(1, 1);
+        platform.lineTo(width - 1, 1);
+        platform.strokePath();
 
-        this.platforms.add(sprite); // Add to static physics group
-        // For static bodies, just ensure the size matches
-        sprite.body.width = width;
-        sprite.body.height = height;
-
-        platform.destroy();
+        // Create invisible physics body
+        const body = this.add.rectangle(x + width / 2, y + height / 2, width, height);
+        this.physics.add.existing(body, true); // true = static body
+        this.platforms.add(body);
     }
 
     createFlag(x, y) {
@@ -373,6 +383,17 @@ export default class Level1Scene extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(this.pauseKey)) {
             this.scene.pause();
             // TODO: Show pause menu
+        }
+
+        // DEBUG: Level skip keys (1, 2, 3)
+        if (this.input.keyboard.checkDown(this.input.keyboard.addKey('ONE'), 500)) {
+            this.scene.start(SCENES.LEVEL_1);
+        }
+        if (this.input.keyboard.checkDown(this.input.keyboard.addKey('TWO'), 500)) {
+            this.scene.start(SCENES.LEVEL_2);
+        }
+        if (this.input.keyboard.checkDown(this.input.keyboard.addKey('THREE'), 500)) {
+            this.scene.start(SCENES.LEVEL_3);
         }
     }
 
